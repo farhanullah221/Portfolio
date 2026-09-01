@@ -28,17 +28,16 @@ export default function About() {
 
       <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Left — visual card */}
           <div className="relative order-2 lg:order-1">
             <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-2 shadow-2xl transition-all duration-500 hover:border-white/20">
               <div className="relative overflow-hidden rounded-xl">
                 <img
-                  src="src\assets\Gemini_Generated_Image_9dudyt9dudyt9dud.png"
+                  src="https://images.openai.com/static-rsc-4/dJGcsV-wSLtsEwnDs9FbWqDnKVUAzif43kwsHTQhzoZ-t_2B64O7vWiSHgXD_cOFCtWa4CJO5w3g6mhYLLv104A4eN0mtc1tvuHI8nWL3175Hv7_BCUwgOaubImekDuZxPOvjknM3x_6Bb590fxmT9OJB3aFAOp1Fg9vifrUXyw?purpose=inline"
+                  alt="Farhan Salih - Frontend Developer"
                   className="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent" />
 
-                {/* floating code badge */}
                 <div className="absolute left-4 top-4 flex items-center gap-2 rounded-lg border border-white/10 bg-gray-950/60 px-3 py-1.5 backdrop-blur-md">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
                   <span className="text-xs font-medium text-gray-300">
