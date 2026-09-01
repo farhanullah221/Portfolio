@@ -75,10 +75,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-[100] w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-[#090d16]/90 backdrop-blur-md border-b border-white/10 py-3.5 shadow-lg shadow-black/30"
-          : "bg-transparent py-5 sm:py-6"
+          ? "bg-[#090d16]/95 backdrop-blur-md border-b border-white/10 py-3.5 shadow-lg shadow-black/40"
+          : "bg-[#090d16]/80 sm:bg-transparent py-5 sm:py-6"
       }`}
     >
       <div className="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -169,7 +169,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation Drawer */}
       <div
-        className={`md:hidden fixed inset-x-0 top-[65px] bottom-0 bg-[#090d16]/98 backdrop-blur-2xl border-b border-white/10 transition-all duration-300 ease-in-out origin-top ${
+        className={`md:hidden fixed inset-x-0 top-[65px] h-[calc(100vh-65px)] bg-[#090d16] border-b border-white/10 transition-all duration-300 ease-in-out origin-top ${
           mobileMenuOpen
             ? "opacity-100 scale-y-100 pointer-events-auto"
             : "opacity-0 scale-y-0 pointer-events-none"
