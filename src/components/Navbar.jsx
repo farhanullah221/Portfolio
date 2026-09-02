@@ -8,6 +8,7 @@ const navLinks = [
   { name: "Services", href: "#services" },
   { name: "Projects", href: "#projects" },
   { name: "Experience", href: "#experience" },
+  { name: "Education", href: "#education" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -138,8 +139,7 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* CTA Link Button */}
-          <div className="hidden md:flex items-center">
+           <div className="hidden md:flex items-center">
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, "#contact")}
@@ -150,8 +150,7 @@ export default function Navbar() {
             </a>
           </div>
 
-          {/* Mobile Toggle Button */}
-          <button
+           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
@@ -167,8 +166,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation Drawer */}
-      <div
+       <div
         className={`md:hidden fixed inset-x-0 top-[65px] h-[calc(100vh-65px)] bg-[#090d16] border-b border-white/10 transition-all duration-300 ease-in-out origin-top ${
           mobileMenuOpen
             ? "opacity-100 scale-y-100 pointer-events-auto"

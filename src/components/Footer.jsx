@@ -1,13 +1,21 @@
 import React from "react";
 import { ArrowUp, Mail, ArrowRight } from "lucide-react";
 
-const footerLinks = [
+const quickLinks = [
   { name: "Home", href: "#home" },
   { name: "About", href: "#about" },
   { name: "Skills", href: "#skills" },
   { name: "Services", href: "#services" },
   { name: "Projects", href: "#projects" },
+  { name: "Education", href: "#education" },
   { name: "Contact", href: "#contact" },
+];
+
+const servicesList = [
+  { name: "Frontend Development", href: "#services" },
+  { name: "WordPress Development", href: "#services" },
+  { name: "Landing Pages", href: "#services" },
+  { name: "Website Redesign", href: "#services" },
 ];
 
 const socialLinks = [
@@ -61,7 +69,6 @@ function SocialIcon({ type }) {
 export default function Footer() {
   const scrollToTop = (e) => {
     if (e) e.preventDefault();
-
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -70,7 +77,6 @@ export default function Footer() {
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
-
     const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
 
@@ -83,19 +89,19 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-[#05070b]">
-      {/* Ambient glow */}
+    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-[#05070b] text-white">
+      {/* Ambient background glow */}
       <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[700px] -translate-x-1/2 rounded-full bg-teal-500/[0.06] blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-        {/* Main footer */}
-        <div className="grid gap-12 py-16 md:grid-cols-[1.2fr_1fr_0.8fr] md:py-20">
-          {/* Brand */}
-          <div className="max-w-md">
+        {/* Main Footer Grid Layout */}
+        <div className="grid gap-10 py-12 md:py-16 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Column 1: Brand / About */}
+          <div className="space-y-4">
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, "#home")}
-              className="group flex items-center space-x-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-md select-none animate-[logoEntrance_500ms_ease-out_forwards] transition-all duration-400 ease-out hover:-translate-y-0.5 hover:rotate-0 motion-reduce:animate-none motion-reduce:transform-none"
+              className="group flex items-center space-x-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-md select-none transition-all duration-300 hover:-translate-y-0.5"
               aria-label="Farhan Salih Home"
             >
               <div className="flex items-center justify-center w-10 h-10 bg-[#CCFF00] rounded-[2px] shrink-0">
@@ -119,56 +125,82 @@ export default function Footer() {
               </div>
             </a>
 
-            <p className="mt-5 max-w-sm text-[15px] leading-7 text-slate-400">
-              Frontend & WordPress Developer creating clean, responsive and
-              modern digital experiences.
+            <p className="text-xs sm:text-sm leading-relaxed text-slate-400">
+              Frontend & WordPress Developer focused on building modern,
+              responsive and user-friendly websites with clean design and
+              practical functionality.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] px-3.5 py-2">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-              </span>
-
-              <span className="text-xs font-medium text-slate-300">
-                Available for new projects
-              </span>
-            </div>
+            <p className="text-xs text-slate-500 italic">
+              Turning ideas into fast, responsive and professional web
+              experiences.
+            </p>
           </div>
 
-          {/* Navigation */}
+          {/* Column 2: Quick Links */}
           <div>
-            <p className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Navigation
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 font-mono">
+              Quick Links
             </p>
-
-            <nav className="grid grid-cols-2 gap-x-8 gap-y-4">
-              {footerLinks.map((link) => (
+            <nav className="grid grid-cols-2 gap-2 text-xs sm:text-sm">
+              {quickLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="group flex w-fit items-center gap-1.5 text-sm text-slate-400 transition-colors duration-200 hover:text-white"
+                  className="group flex items-center gap-1 text-slate-400 transition-colors duration-200 hover:text-teal-300"
                 >
                   <span>{link.name}</span>
-
-                  <ArrowRight className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-teal-400" />
+                  <ArrowRight className="h-3 w-3 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-teal-400" />
                 </a>
               ))}
             </nav>
           </div>
 
-          {/* Connect */}
+          {/* Column 3: Services */}
           <div>
-            <p className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Let's Connect
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 font-mono">
+              Services
+            </p>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              {servicesList.map((service) => (
+                <li key={service.name}>
+                  <a
+                    href={service.href}
+                    onClick={(e) => handleNavClick(e, service.href)}
+                    className="group flex items-center gap-1.5 text-slate-400 transition-colors duration-200 hover:text-teal-300"
+                  >
+                    <span className="h-1 w-1 rounded-full bg-teal-400/50 group-hover:bg-teal-400" />
+                    <span>{service.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Contact / Availability */}
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 font-mono">
+              Get In Touch
             </p>
 
-            <p className="mb-5 text-sm leading-6 text-slate-400">
-              Have a project or opportunity in mind? Let's talk.
+            <p className="text-xs sm:text-sm leading-relaxed text-slate-400">
+              Have a project in mind or looking for a frontend/WordPress
+              developer? Feel free to get in touch.
             </p>
 
-            <div className="flex items-center gap-2.5">
+            <div className="inline-flex items-center gap-2 rounded-lg border border-teal-500/20 bg-teal-500/10 px-3 py-1.5">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-400" />
+              </span>
+              <span className="text-[11px] font-mono text-teal-300">
+                Available for onsite, hybrid & Remote Opportunities
+              </span>
+            </div>
+
+            {/* Social Icons */}
+            <div className="pt-1 flex items-center gap-2.5">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
@@ -179,7 +211,7 @@ export default function Footer() {
                   }
                   aria-label={social.name}
                   title={social.name}
-                  className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-slate-400 transition-all duration-300 hover:-translate-y-1 hover:border-teal-400/30 hover:bg-teal-400/[0.08] hover:text-teal-400"
+                  className="group flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-slate-400 transition-all duration-300 hover:-translate-y-1 hover:border-teal-400/30 hover:bg-teal-400/[0.08] hover:text-teal-400"
                 >
                   <SocialIcon type={social.type} />
                 </a>
@@ -188,18 +220,39 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Compact Bottom CTA Banner */}
+        <div className="my-6 rounded-2xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-6 text-center sm:text-left sm:flex sm:items-center sm:justify-between gap-4">
+          <div>
+            <h4 className="text-base sm:text-lg font-bold text-white">
+              Let's Build Something Great
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              Have an idea, project, or opportunity? Let's turn it into a modern
+              web experience.
+            </p>
+          </div>
+          <a
+            href="#contact"
+            onClick={(e) => handleNavClick(e, "#contact")}
+            className="mt-4 sm:mt-0 shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-950 bg-teal-400 hover:bg-teal-300 rounded-xl transition-all duration-200 shadow-md shadow-teal-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+          >
+            <span>Let's Work Together</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+
         {/* Divider */}
         <div className="h-px w-full bg-white/[0.07]" />
 
-        {/* Bottom */}
-        <div className="flex flex-col items-center justify-between gap-5 py-7 sm:flex-row">
+        {/* Bottom Bar */}
+        <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
           <p className="text-xs text-slate-500">
             © 2026 <span className="text-slate-400">Farhan Salih</span>. All
             rights reserved.
           </p>
 
-          <div className="flex items-center gap-5">
-            <span className="text-xs text-slate-600">
+          <div className="flex items-center gap-4">
+            <span className="text-xs text-slate-600 font-mono">
               Designed & Built with React
             </span>
 
@@ -207,7 +260,7 @@ export default function Footer() {
               onClick={scrollToTop}
               aria-label="Back to top"
               title="Back to top"
-              className="group flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-slate-400 transition-all duration-300 hover:-translate-y-1 hover:border-teal-400/30 hover:bg-teal-400/[0.08] hover:text-teal-400"
+              className="group flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-slate-400 transition-all duration-300 hover:-translate-y-1 hover:border-teal-400/30 hover:bg-teal-400/[0.08] hover:text-teal-400"
             >
               <ArrowUp className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
             </button>
