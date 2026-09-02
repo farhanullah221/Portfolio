@@ -132,8 +132,8 @@ export default function Hero() {
               </a>
 
               <a
-                href="/Farhan-Salih-CV.pdf"
-                download="Farhan-Salih-CV.pdf"
+                href="public\Farhan Salih  Front-End & WordPress Developer CV.pdf"
+                download="Farhan Salih  Front-End & WordPress Developer CV.pdf"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 bg-slate-900/80 hover:text-teal-300 hover:bg-slate-800/90 border border-white/10 hover:border-teal-500/40 px-6 py-3.5 rounded-full transition-all duration-300 ease-out shadow-sm hover:shadow-teal-500/10 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
               >
                 <Download
