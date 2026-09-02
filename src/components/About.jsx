@@ -1,4 +1,11 @@
-import { ArrowUpRight, Code2, Monitor, Layers, Sparkles } from "lucide-react";
+import {
+  ArrowUpRight,
+  Code2,
+  Monitor,
+  Layers,
+  Sparkles,
+  Rocket,
+} from "lucide-react";
 
 const stats = [
   { label: "Year Experience", value: "1+", icon: Code2 },
@@ -72,6 +79,25 @@ export default function About() {
 
             {/* decorative accent line */}
             <div className="absolute -bottom-4 -left-4 -z-10 h-full w-full rounded-2xl border border-white/5" />
+
+            {/* statistics directly below image */}
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={stat.label}
+                    className="group rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-4 transition-all duration-300 hover:border-white/20 hover:from-white/[0.1]"
+                  >
+                    <Icon className="h-5 w-5 text-blue-400 transition-colors duration-300 group-hover:text-cyan-300" />
+                    <p className="mt-3 text-2xl font-bold text-white">
+                      {stat.value}
+                    </p>
+                    <p className="mt-0.5 text-xs text-gray-400">{stat.label}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Right — content */}
@@ -100,6 +126,11 @@ export default function About() {
               experiences that feel effortless.
             </p>
 
+            <p className="mt-4 text-base leading-relaxed text-gray-400">
+              Currently focused on growing my frontend skills, with a future
+              plan to learn Full-Stack Development.
+            </p>
+
             {/* skill chips */}
             <div className="mt-6 flex flex-wrap gap-2">
               {skills.map((skill) => (
@@ -112,6 +143,20 @@ export default function About() {
               ))}
             </div>
 
+            {/* Learning & Growth Card */}
+            <div className="mt-6 group rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-4 transition-all duration-300 hover:border-white/20 hover:from-white/[0.1]">
+              <div className="flex items-center gap-2.5">
+                <Rocket className="h-5 w-5 text-blue-400 transition-colors duration-300 group-hover:text-cyan-300" />
+                <h3 className="text-sm font-semibold text-white">
+                  Learning &amp; Growth
+                </h3>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-gray-400">
+                Continuously improving my development skills with a future plan
+                to learn Full-Stack Development.
+              </p>
+            </div>
+
             {/* button */}
             <a href="#contact">
               <button className="group mt-8 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-blue-400/40 hover:bg-blue-500/10">
@@ -119,25 +164,6 @@ export default function About() {
                 <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </button>
             </a>
-
-            {/* statistics */}
-            <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {stats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div
-                    key={stat.label}
-                    className="group rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-4 transition-all duration-300 hover:border-white/20 hover:from-white/[0.1]"
-                  >
-                    <Icon className="h-5 w-5 text-blue-400 transition-colors duration-300 group-hover:text-cyan-300" />
-                    <p className="mt-3 text-2xl font-bold text-white">
-                      {stat.value}
-                    </p>
-                    <p className="mt-0.5 text-xs text-gray-400">{stat.label}</p>
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </div>
       </div>
