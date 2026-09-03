@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ArrowUp, Mail, ArrowRight } from "lucide-react";
 
 const quickLinks = [
@@ -66,7 +66,262 @@ function SocialIcon({ type }) {
   return <Mail className="h-[17px] w-[17px]" />;
 }
 
+/* ==================================================
+   DYNAMIC NETWORK WITH EXCLUSION ZONE & FASTER BOUNCE
+   ================================================== */
+function NetworkBackground({ mouseRef }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId;
+    let width = (canvas.width = canvas.parentElement.offsetWidth);
+    let height = (canvas.height = canvas.parentElement.offsetHeight);
+
+    const handleResize = () => {
+      if (!canvas.parentElement) return;
+      width = canvas.width = canvas.parentElement.offsetWidth;
+      height = canvas.height = canvas.parentElement.offsetHeight;
+      initParticles();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    let particles = [];
+    const getParticleCount = () => {
+      if (width < 640) return 38; // Mobile
+      if (width < 1024) return 65; // Tablet
+      return 90; // Desktop
+    };
+
+    // Calculate perpendicular distance from point (mouse) to line segment (p1 -> p2)
+    const distToSegment = (p1, p2, mouse) => {
+      const l2 = (p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y);
+      if (l2 === 0) return Math.hypot(p1.x - mouse.x, p1.y - mouse.y);
+      let t =
+        ((mouse.x - p1.x) * (p2.x - p1.x) + (mouse.y - p1.y) * (p2.y - p1.y)) /
+        l2;
+      t = Math.max(0, Math.min(1, t));
+      const projX = p1.x + t * (p2.x - p1.x);
+      const projY = p1.y + t * (p2.y - p1.y);
+      return Math.hypot(mouse.x - projX, mouse.y - projY);
+    };
+
+    class Particle {
+      constructor() {
+        this.baseX = Math.random() * width;
+        this.baseY = Math.random() * height;
+
+        this.x = this.baseX;
+        this.y = this.baseY;
+
+        // ~1.8x Faster Movement Speed
+        this.vx = (Math.random() - 0.5) * 0.58;
+        this.vy = (Math.random() - 0.5) * 0.58;
+
+        this.dispX = 0;
+        this.dispY = 0;
+
+        this.radius = Math.random() * 1.25 + 0.95;
+        this.isTeal = Math.random() < 0.2;
+        this.alpha = Math.random() * 0.35 + 0.25;
+      }
+
+      update() {
+        // Ambient movement
+        this.baseX += this.vx;
+        this.baseY += this.vy;
+
+        // Invisible wall bounce behavior
+        if (this.baseX <= 10) {
+          this.baseX = 10;
+          this.vx *= -1;
+        } else if (this.baseX >= width - 10) {
+          this.baseX = width - 10;
+          this.vx *= -1;
+        }
+
+        if (this.baseY <= 10) {
+          this.baseY = 10;
+          this.vy *= -1;
+        } else if (this.baseY >= height - 10) {
+          this.baseY = height - 10;
+          this.vy *= -1;
+        }
+
+        // Mouse Repulsion & Clear Exclusion Zone
+        let targetDispX = 0;
+        let targetDispY = 0;
+
+        if (mouseRef.current.active) {
+          const dx = this.baseX - mouseRef.current.x;
+          const dy = this.baseY - mouseRef.current.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          const exclusionRadius = 38; // Absolute clear zone around cursor
+          const influenceRadius = 110;
+
+          if (dist < influenceRadius && dist > 0) {
+            const dirX = dx / dist;
+            const dirY = dy / dist;
+
+            if (dist < exclusionRadius) {
+              // Push particle outside exclusion radius
+              const pushForce = exclusionRadius - dist + 5;
+              targetDispX = dirX * pushForce;
+              targetDispY = dirY * pushForce;
+            } else {
+              // Controlled surrounding repulsion
+              const factor =
+                1 -
+                (dist - exclusionRadius) / (influenceRadius - exclusionRadius);
+              const force = factor * 22;
+              targetDispX = dirX * force;
+              targetDispY = dirY * force;
+            }
+          }
+        }
+
+        // Smooth Lerp transitions (stable when mouse stops)
+        this.dispX += (targetDispX - this.dispX) * 0.12;
+        this.dispY += (targetDispY - this.dispY) * 0.12;
+
+        this.x = this.baseX + this.dispX;
+        this.y = this.baseY + this.dispY;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.isTeal
+          ? `rgba(45, 212, 191, ${this.alpha * 0.9})`
+          : `rgba(240, 246, 255, ${this.alpha * 0.85})`;
+        ctx.fill();
+      }
+    }
+
+    const initParticles = () => {
+      particles = [];
+      const count = getParticleCount();
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    };
+
+    initParticles();
+
+    // Render Loop
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Update & Draw Particles
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+      }
+
+      // Network Lines Rendering with Mouse Exclusion Check
+      const baseMaxDist = 135;
+      const cursorExtraRadius = 120;
+      const clearZoneRadius = 32; // No lines allowed inside this radius around mouse
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const p1 = particles[i];
+          const p2 = particles[j];
+
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          // Check if line segment intersects mouse clear zone
+          if (mouseRef.current.active) {
+            const lineDistanceToMouse = distToSegment(p1, p2, mouseRef.current);
+            if (lineDistanceToMouse < clearZoneRadius) {
+              // Exclude line from passing under cursor
+              continue;
+            }
+          }
+
+          // Temporary extra connections near cursor
+          let extraBoost = 0;
+          if (mouseRef.current.active) {
+            const midX = (p1.x + p2.x) / 2;
+            const midY = (p1.y + p2.y) / 2;
+            const distToMouse = Math.hypot(
+              midX - mouseRef.current.x,
+              midY - mouseRef.current.y,
+            );
+
+            if (distToMouse < cursorExtraRadius) {
+              extraBoost = (1 - distToMouse / cursorExtraRadius) * 28;
+            }
+          }
+
+          const effectiveMaxDistance = baseMaxDist + extraBoost;
+
+          if (dist < effectiveMaxDistance) {
+            let opacity = (1 - dist / effectiveMaxDistance) * 0.25;
+
+            if (extraBoost > 0) {
+              opacity += (extraBoost / 28) * 0.12;
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineWidth = 0.9;
+
+            if (p1.isTeal || p2.isTeal) {
+              ctx.strokeStyle = `rgba(45, 212, 191, ${opacity * 0.85})`;
+            } else {
+              ctx.strokeStyle = `rgba(240, 246, 255, ${opacity})`;
+            }
+
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [mouseRef]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none absolute inset-0 h-full w-full z-0 opacity-80"
+    />
+  );
+}
+
 export default function Footer() {
+  const mouseRef = useRef({ x: -1000, y: -1000, active: false });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      active: true,
+    };
+  };
+
+  const handleMouseLeave = () => {
+    mouseRef.current.active = false;
+  };
+
   const scrollToTop = (e) => {
     if (e) e.preventDefault();
     window.scrollTo({
@@ -89,11 +344,18 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-[#05070b] text-white">
+    <footer
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative overflow-hidden border-t border-white/[0.06] bg-[#05070b] text-white"
+    >
+      {/* Dynamic connected lines and dots animation */}
+      <NetworkBackground mouseRef={mouseRef} />
+
       {/* Ambient background glow */}
       <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[700px] -translate-x-1/2 rounded-full bg-teal-500/[0.06] blur-[120px]" />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         {/* Main Footer Grid Layout */}
         <div className="grid gap-10 py-12 md:py-16 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: Brand / About */}
