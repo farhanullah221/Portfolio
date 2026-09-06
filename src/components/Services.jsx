@@ -166,7 +166,6 @@ export default function Services() {
   // Open modal handler
   const handleOpenModal = (service) => {
     setSelectedService(service);
-    // Slight tick to allow DOM mount before applying active scale/opacity state
     setTimeout(() => {
       setIsAnimating(true);
     }, 10);
@@ -177,7 +176,7 @@ export default function Services() {
     setIsAnimating(false);
     setTimeout(() => {
       setSelectedService(null);
-    }, 250); // Matches transition duration
+    }, 250);
   };
 
   // Close on Escape key press & lock body scroll
@@ -221,14 +220,15 @@ export default function Services() {
       id="services"
       className="relative py-20 sm:py-28 bg-[#090d16] text-white overflow-hidden"
     >
-      {/* Background Decorative Element */}
+      {/* Background Decorative Ambient Flares */}
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.015)_1px,transparent_1px)] [background-size:32px_32px]" />
 
       <div className="max-w-7xl 2xl:max-w-[1440px] 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-          <span className="inline-block px-3.5 py-1.5 text-xs font-mono font-semibold tracking-widest text-teal-400 uppercase bg-teal-500/10 border border-teal-500/20 rounded-full mb-4">
+          <span className="inline-block px-3.5 py-1.5 text-xs font-mono font-semibold tracking-widest text-teal-400 uppercase bg-teal-500/10 border border-teal-500/20 rounded-full mb-4 shadow-sm shadow-teal-500/5">
             WHAT I DO
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
@@ -243,12 +243,18 @@ export default function Services() {
             return (
               <div
                 key={service.id}
-                className="group relative bg-slate-900/40 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-teal-500/40 hover:bg-slate-900/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-teal-500/5"
+                className="group relative bg-slate-900/40 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:border-teal-500/40 hover:bg-slate-900/80 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-teal-500/10 overflow-hidden"
               >
+                {/* Top Subtle Border Highlight */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-400/0 to-transparent transition-all duration-300 group-hover:via-teal-400/60" />
+
+                {/* Subtle Radial Hover Glow inside Card */}
+                <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-teal-500/0 blur-2xl transition-all duration-500 group-hover:bg-teal-500/10" />
+
                 <div>
-                  {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-6 group-hover:scale-110 group-hover:bg-teal-500/20 transition-all duration-300">
-                    <IconComponent className="w-6 h-6" />
+                  {/* Icon Wrapper */}
+                  <div className="relative w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-6 transition-all duration-300 group-hover:scale-110 group-hover:bg-teal-500/20 group-hover:border-teal-400/40 group-hover:shadow-md group-hover:shadow-teal-500/10">
+                    <IconComponent className="w-6 h-6 transition-transform duration-300 group-hover:rotate-3" />
                   </div>
 
                   {/* Title */}
@@ -262,13 +268,14 @@ export default function Services() {
                   </p>
                 </div>
 
+                {/* Learn More Trigger Button */}
                 <button
                   type="button"
                   onClick={() => handleOpenModal(service)}
-                  className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-teal-400 uppercase group/btn hover:text-teal-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-md py-1 cursor-pointer"
+                  className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-teal-400 uppercase group/btn hover:text-teal-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-md py-1 cursor-pointer w-fit"
                 >
                   <span>Learn More</span>
-                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1.5" />
                 </button>
               </div>
             );
@@ -276,6 +283,7 @@ export default function Services() {
         </div>
       </div>
 
+      {/* Modal View */}
       {selectedService && (
         <div
           className={`fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 lg:p-8 transition-opacity duration-300 ease-out ${
@@ -299,7 +307,7 @@ export default function Services() {
                 : "opacity-0 scale-95 translate-y-4"
             }`}
           >
-            {/* Modal Header (Fixed at top of panel) */}
+            {/* Modal Header */}
             <div className="relative p-6 sm:p-8 border-b border-white/10 bg-slate-900/50 flex items-start justify-between shrink-0">
               <div className="flex items-start gap-4 sm:gap-5 pr-8">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 shrink-0 mt-0.5">
@@ -324,14 +332,16 @@ export default function Services() {
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="p-2 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 shrink-0"
+                className="p-2 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 shrink-0 cursor-pointer"
                 aria-label="Close details modal"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
+            {/* Modal Content Sections */}
             <div className="p-6 sm:p-8 overflow-y-auto space-y-8 custom-scrollbar">
+              {/* Section 1: What I Offer */}
               <div>
                 <h4 className="text-xs font-mono font-bold tracking-widest text-teal-400 uppercase mb-4 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
@@ -388,7 +398,7 @@ export default function Services() {
               </div>
             </div>
 
-            {/* Modal Footer CTA (Fixed at bottom of panel) */}
+            {/* Modal Footer CTA */}
             <div className="p-5 sm:p-6 border-t border-white/10 bg-slate-900/60 flex items-center justify-between gap-4 shrink-0">
               <span className="hidden sm:inline-block text-xs text-slate-400 font-mono">
                 Ready to take your project to the next level?
